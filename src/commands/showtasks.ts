@@ -1,22 +1,10 @@
 import { SlashCommandBuilder, CommandInteraction, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, ButtonInteraction } from 'discord.js';
-import taskSchema from '../schemas/task-schema';
+import functions from '../functions';
 
 module.exports = {
     commandData: new SlashCommandBuilder()
         .setName('showtasks')
         .setDescription('Shows all tasks you have saved.'),
-
-    async getTasks(interaction: CommandInteraction | ButtonInteraction) {
-
-        let tasks;
-
-        await new Promise(async resolve => {
-            tasks = await taskSchema.find({ userID: interaction.user.id });
-            resolve(null);
-        })
-
-        return tasks;
-    },
     
     async updateStats(tasks: Array<any>, embed: EmbedBuilder, page: number = 1) {
 
@@ -52,7 +40,7 @@ module.exports = {
                 .setStyle(ButtonStyle.Primary),
         );
 
-        const tasks = await this.getTasks(interaction);
+        const tasks = await functions.getTasks(interaction);
         await this.updateStats(tasks, embed);
 
         await interaction.reply({
@@ -63,7 +51,7 @@ module.exports = {
 
     async onButtonInteraction(interaction: ButtonInteraction) {
 
-        const tasks = await this.getTasks(interaction);
+        const tasks = await functions.getTasks(interaction);
         const interactionEmbed = interaction.message.embeds[0];
         const embed = EmbedBuilder.from(interactionEmbed)
             .setFields()
