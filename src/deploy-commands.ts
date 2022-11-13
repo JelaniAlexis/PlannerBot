@@ -21,7 +21,7 @@ const args = process.argv.slice(2);
 for (const file of commandFiles) {
     const filePath = join(commandsPath, file);
     const command = require(filePath);
-    commands.push(command.data.toJSON());
+    commands.push(command.commandData.toJSON());
 }
 
 if (args[0] == "guild") {

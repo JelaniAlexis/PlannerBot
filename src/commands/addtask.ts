@@ -11,8 +11,8 @@ module.exports = {
         'UTC+10:00', 'UTC+10:30', 'UTC+11:00', 'UTC+12:00', 'UTC+12:45', 'UTC+13:00', 'UTC+14:00'
     ],
     commandData: new SlashCommandBuilder()
-        .setName('settask')
-        .setDescription('Sets a deadline for a task.')
+        .setName('addtask')
+        .setDescription('Adds a task with a deadline.')
         .addStringOption(option => option.setName('taskname')
             .setDescription('The name of the task.')
             .setRequired(true))
@@ -50,7 +50,9 @@ module.exports = {
             taskname: taskName?.value,
             expirationDate: taskExpiration,
             userID: interaction.user.id
-        }).save()
-        await interaction.reply({ content: `Task ${taskName?.value} added.`, ephemeral: true });
+        }).save().then(async () => {
+            await interaction.reply({ content: `Task ${taskName?.value} added.`, ephemeral: true });
+        })
+        
     }
 }

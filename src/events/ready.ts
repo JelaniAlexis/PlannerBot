@@ -18,7 +18,7 @@ module.exports = {
             //@ts-ignore
             const currentTime = (Date.now() - client.loadingStartTime) / 1000;
             //@ts-ignore
-            console.log(`Logged in as ${client.user?.username} (Total loading time: ${currentTime.toFixed(1)}s)`);
+            console.log(`Logged in as ${client.user?.tag} (Total loading time: ${currentTime.toFixed(2)}s)`);
         })
         .catch(err => {
             process.stdout.clearLine(0);
