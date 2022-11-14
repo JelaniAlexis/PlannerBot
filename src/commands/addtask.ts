@@ -39,10 +39,10 @@ module.exports = {
     },
 
     async execute(interaction: CommandInteraction) {
-        const taskName: CommandInteractionOption<CacheType> | null = interaction.options.get('taskname') !== null ? interaction.options.get('taskname') : null;
-        const expirationDate: CommandInteractionOption<CacheType> | null = interaction.options.get('expirationdate') !== null ? interaction.options.get('expirationdate') : null;
-        const expirationTime: CommandInteractionOption<CacheType> | null = interaction.options.get('expirationtime') !== null ? interaction.options.get('expirationtime') : null;
-        const timeZone: CommandInteractionOption<CacheType> | null = interaction.options.get('timezone') !== null ? interaction.options.get('timezone') : null;
+        const taskName = interaction.options.get('taskname') !== null ? interaction.options.get('taskname') : null;
+        const expirationDate = interaction.options.get('expirationdate') !== null ? interaction.options.get('expirationdate') : null;
+        const expirationTime = interaction.options.get('expirationtime') !== null ? interaction.options.get('expirationtime') : null;
+        const timeZone = interaction.options.get('timezone') !== null ? interaction.options.get('timezone') : null;
 
         const taskExpiration: string = `${expirationDate?.value}T${expirationTime?.value || '00:00:00'}${timeZone?.value}`;
         
