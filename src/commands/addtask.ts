@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, CommandInteraction, CommandInteractionOption, CacheType } from 'discord.js';
+import { SlashCommandBuilder, CommandInteraction } from 'discord.js';
 import taskSchema from '../schemas/task-schema';
 
 module.exports = {
@@ -17,15 +17,15 @@ module.exports = {
             .setDescription('The name of the task.')
             .setRequired(true))
         .addStringOption(option => option.setName('expirationdate')
-            .setDescription("The date which you want the task to expire on. Format: YYYY-MM-DD")
+            .setDescription("(YYYY-MM-DD) The date which you want the task to expire on.")
             .setRequired(true))
         .addStringOption(option => option.setName('expirationtime')
-            .setDescription("The exact time you want the task to expire at. Format: HH:MM:SS")
-            .setRequired(true))
+            .setDescription("(HH:MM:SS) The exact time you want the task to expire at.")
+            .setRequired(false))
         .addStringOption(option => option.setName('timezone')
-            .setDescription("The timezone to take into account.")
-            .setRequired(true)
-            .setAutocomplete(true)),
+            .setDescription("The timezone to take into account. Defaults to UTC+00:00 (GMT).")
+            .setRequired(false)
+            .setAutocomplete(false)),
     
     async autocomplete(interaction: any) {
         const focusedValue = interaction.options.getFocused();
@@ -44,7 +44,12 @@ module.exports = {
         const expirationTime = interaction.options.get('expirationtime') !== null ? interaction.options.get('expirationtime') : null;
         const timeZone = interaction.options.get('timezone') !== null ? interaction.options.get('timezone') : null;
 
-        const taskExpiration: string = `${expirationDate?.value}T${expirationTime?.value || '00:00:00'}${timeZone?.value}`;
+        const taskExpiration: string = `${expirationDate?.value}T${expirationTime?.value || '00:00:00'}${timeZone?.value || '+00:00'}`;
+
+        if (Date.now() > Date.parse(taskExpiration)) {
+            await interaction.reply({ content: "The time given is not allowed. Please use future dates rather than past ones.", ephemeral: true});
+            return;
+        }
         
         await new taskSchema({
             taskname: taskName?.value,

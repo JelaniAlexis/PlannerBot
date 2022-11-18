@@ -19,6 +19,8 @@ module.exports = {
             embed
                 .setFooter({ text: `Showing ${(page - 1) * 10 + 1}-${page * 10 > tasks.length ? tasks.length : page * 10} of ${tasks.length}` })
                 .setDescription(`**Page ${page}/${Math.ceil(tasks.length / 10)}**`);
+        } else {
+            embed.setDescription("Whoops! Looks like you have no tasks set.");
         }
     },
 

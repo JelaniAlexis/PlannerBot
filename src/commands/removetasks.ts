@@ -20,20 +20,19 @@ module.exports = {
     async execute(interaction: CommandInteraction){
 
         const tasks = await functions.getTasks(interaction);
-        if (tasks.entries.length == 0) return interaction.reply("No tasks to delete!");
+        if (tasks.length == 0) return interaction.reply({content: "No tasks to delete!", ephemeral: true});
 
         // @ts-ignore
         if (interaction.options.getSubcommand() === 'one') {
             const taskIndex = interaction.options.get('taskindex')?.value as number;
             const taskName = tasks[taskIndex - 1].taskname;
-            console.log(tasks[taskIndex - 1]._id);
             taskSchema.deleteOne({ _id: tasks[taskIndex - 1]._id }, (err: any) => { if (err) console.log(err) });
-            await interaction.reply(`Task ${taskName} removed.`);
+            await interaction.reply({content: `Task ${taskName} removed.`, ephemeral: true});
         }
         // @ts-ignore
         if (interaction.options.getSubcommand() === 'all') {
             taskSchema.deleteMany({ userID: interaction.user.id }, (err: any) => { if (err) console.error(err) });
-            await interaction.reply("All tasks succesfully cleared.")
+            await interaction.reply({content: "All tasks succesfully cleared.", ephemeral: true});
         }
     }
 }
